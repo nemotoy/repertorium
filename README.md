@@ -1,6 +1,14 @@
 # repertorium
 GitHubから指定オーナーのリポジトリを取得
 
+★作成中★
+
+## function
+
+・フィルタリング（リポジトリ名の正規表現等）
+
+・チェックアウトブランチ指定
+
 ## ref
 
 https://developer.github.com/v3/
