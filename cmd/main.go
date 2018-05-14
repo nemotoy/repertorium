@@ -13,6 +13,7 @@ import (
 
 // TODO 機能実現スピード最優先での実装なので要リファクタ
 func main() {
+	// TODO env, argでまとめる
 	var owner string
 	eOwner := os.Getenv("OWNER")
 	if eOwner == "" {
@@ -28,13 +29,19 @@ func main() {
 	}
 	fmt.Printf("target owner is %s\n", owner)
 
+	// TODO 全リポジトリ取得するまでページング（１ページ１００がMAXの様子）
 	cli := pkg.NewGitHubClient()
-	// TODO set perpage
-	options := &github.RepositoryListOptions{}
+	options := &github.RepositoryListOptions{ListOptions: github.ListOptions{Page: 1, PerPage: 500}}
 	results, err := cli.GetRepositoriesList(context.Background(), owner, options)
 	if err != nil {
 		panic(err)
 	}
+	options2 := &github.RepositoryListOptions{ListOptions: github.ListOptions{Page: 2, PerPage: 500}}
+	results2, err := cli.GetRepositoriesList(context.Background(), owner, options2)
+	if err != nil {
+		panic(err)
+	}
+	results = append(results, results2...)
 
 	file, err := os.Create("./result.json")
 	if err != nil {
