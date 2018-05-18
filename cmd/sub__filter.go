@@ -15,15 +15,14 @@
 package cmd
 
 import (
-	"github.com/spf13/viper"
-	"go.uber.org/zap"
+	"fmt"
 
 	"github.com/spf13/cobra"
 )
 
-// listupCmd represents the listup command
-var listupCmd = &cobra.Command{
-	Use:   "listup",
+// filterCmd represents the filter command
+var filterCmd = &cobra.Command{
+	Use:   "filter",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -32,29 +31,20 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		logger, _ := zap.NewProduction()
-		defer logger.Sync()
-		logger.Info("listup called")
-
-		owner := viper.GetString("get.listup.owner")
-		maxPage := viper.GetInt("get.listup.maxPage")
-
-		logger.Info("[settings]", zap.String("owner", owner), zap.Int("maxPage", maxPage))
+		fmt.Println("filter called")
 	},
 }
 
 func init() {
-	getCmd.AddCommand(listupCmd)
-	// TODO if I wanna add other command(f.e. set) and use same listupCmd, add this.
-	// setCmd.AddCommand(listupCmd)
+	getCmd.AddCommand(filterCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// listupCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// filterCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// listupCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// filterCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

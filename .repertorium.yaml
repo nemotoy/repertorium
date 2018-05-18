@@ -1,10 +1,12 @@
-listup:
-  owner: "sky0621"
-  maxPage: 10
+get:
+  listup:
+    owner: "sky0621"
+    maxPage: 10
 
-filter:
-  name: "go-"
-  language: "Go"
+  filter:
+    name: "go-"
+    language: "Go"
 
-checkout:
-  branch: "master"
+  checkout:
+    branch: "master"
+
