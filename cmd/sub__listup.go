@@ -15,6 +15,7 @@
 package cmd
 
 import (
+	"github.com/sky0621/repertorium/service"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 
@@ -40,6 +41,8 @@ to quickly create a Cobra application.`,
 		maxPage := viper.GetInt("get.listup.maxPage")
 
 		logger.Info("[settings]", zap.String("owner", owner), zap.Int("maxPage", maxPage))
+
+		service.Listup(owner, maxPage)
 	},
 }
 
