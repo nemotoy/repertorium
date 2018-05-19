@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"github.com/sky0621/repertorium/service"
+	"github.com/sky0621/repertorium/static"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -39,9 +40,21 @@ to quickly create a Cobra application.`,
 		name := viper.GetString("get.filter.name")
 		language := viper.GetString("get.filter.language")
 
-		logger.Info("[settings]", zap.String("name", name), zap.String("language", language))
+		listupOutputPath, err := cmd.PersistentFlags().GetString(static.FlagKeyListupOutputPath)
+		if err != nil {
+			logger.Error("@PersistentFlags.Get", zap.String("flag.key", static.FlagKeyListupOutputPath))
+			return
+		}
 
-		service.Filter(name, language)
+		filterOutputPath, err := cmd.PersistentFlags().GetString(static.FlagKeyFilterOutputPath)
+		if err != nil {
+			logger.Error("@PersistentFlags.Get", zap.String("flag.key", static.FlagKeyFilterOutputPath))
+			return
+		}
+
+		logger.Info("[settings]", zap.String("name", name), zap.String("language", language), zap.String("listupOutputPath", listupOutputPath), zap.String("filterOutputPath", filterOutputPath))
+
+		service.Filter(name, language, listupOutputPath, filterOutputPath)
 	},
 }
 

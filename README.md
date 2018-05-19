@@ -9,6 +9,10 @@ GitHubから指定オーナーのリポジトリを取得
 
 ・チェックアウトブランチ指定
 
+## ■environment
+go version
+go version go1.9.4 linux/amd64
+
 ## ■ref
 
 https://developer.github.com/v3/

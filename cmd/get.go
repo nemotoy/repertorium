@@ -47,6 +47,7 @@ func init() {
 	// and all subcommands, e.g.:
 	// getCmd.PersistentFlags().String("foo", "", "A help for foo")
 	getCmd.PersistentFlags().String(static.FlagKeyListupOutputPath, filepath.Join("intermediate_product", "listup.json"), "")
+	getCmd.PersistentFlags().String(static.FlagKeyFilterOutputPath, filepath.Join("intermediate_product", "filter.json"), "")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
