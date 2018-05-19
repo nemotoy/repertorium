@@ -15,6 +15,9 @@
 package cmd
 
 import (
+	"path/filepath"
+
+	"github.com/sky0621/repertorium/static"
 	"github.com/spf13/cobra"
 )
 
@@ -43,6 +46,7 @@ func init() {
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// getCmd.PersistentFlags().String("foo", "", "A help for foo")
+	getCmd.PersistentFlags().String(static.FlagKeyListupOutputPath, filepath.Join("intermediate_product", "listup.json"), "")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:

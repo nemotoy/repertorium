@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"os"
-	"path/filepath"
 
 	"github.com/google/go-github/github"
 	"github.com/sky0621/repertorium/client"
@@ -16,7 +15,7 @@ const (
 )
 
 // Listup ...
-func Listup(owner string, maxPage int) {
+func Listup(owner string, maxPage int, listupOutputPath string) error {
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
 
@@ -31,7 +30,7 @@ func Listup(owner string, maxPage int) {
 		results, err := cli.GetRepositoriesList(bgCtx, owner, options)
 		if err != nil {
 			logger.Error("@GetRepositoriesList", zap.Int("page", page), zap.String("error", err.Error()))
-			return
+			return err
 		}
 
 		totalResults = append(totalResults, results...)
@@ -47,11 +46,10 @@ func Listup(owner string, maxPage int) {
 	}
 	logger.Info("created totalResults", zap.Int("totalResultsLength", len(totalResults)))
 
-	outputFile := filepath.Join("intermediate_product", "listup.json")
-	fl, err := os.Create(outputFile)
+	fl, err := os.Create(listupOutputPath)
 	if err != nil {
-		logger.Error("@os.Create", zap.String("outputFile", outputFile), zap.String("error", err.Error()))
-		return
+		logger.Error("@os.Create", zap.String("listupOutputPath", listupOutputPath), zap.String("error", err.Error()))
+		return err
 	}
 	defer fl.Close()
 
@@ -59,9 +57,11 @@ func Listup(owner string, maxPage int) {
 		resultJSON, err := json.Marshal(&totalResult)
 		if err != nil {
 			logger.Error("@json.Marshal", zap.String("error", err.Error()))
-			return
+			return err
 		}
 		fl.Write(resultJSON)
 		fl.Write([]byte("\n"))
 	}
+
+	return nil
 }

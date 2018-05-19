@@ -15,7 +15,9 @@
 package cmd
 
 import (
+	"github.com/sky0621/repertorium/service"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
@@ -32,8 +34,13 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		logger, _ := zap.NewProduction()
 		defer logger.Sync()
-
 		logger.Info("checkout called")
+
+		branch := viper.GetString("get.checkout.branch")
+
+		logger.Info("[settings]", zap.String("branch", branch))
+
+		service.Checkout(branch)
 	},
 }
 
