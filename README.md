@@ -6,8 +6,6 @@ GitHubから指定オーナーのリポジトリを取得（ `git clone` ）し�
 取得先に既に同一リポジトリが存在する場合は、 `git pull` を行います。
 
 ## ■require
-- go
-- dep
 - git
 
 ## ■function
@@ -18,12 +16,15 @@ GitHubから指定オーナーのリポジトリを取得（ `git clone` ）し�
 
 - チェックアウトブランチ指定
 
+## ■exec(binary) f.e. Linux
+$ ./repertorium_linux_amd64 get
+
 ## ■environment
 $ go version
 
 go version go1.9.4 linux/amd64
 
-## ■exec
+## ■exec(go run)
 $ dep ensure
 
 $ go run main.go --config .repertorium.yaml get

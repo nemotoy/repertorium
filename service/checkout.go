@@ -53,8 +53,15 @@ func Checkout(branch, outputPath, filterOutputPath string) error {
 			}
 		} else {
 			logger.Info("not exists repository", zap.String("cloneURL", repositoryModel.CloneURL), zap.String("repositoryPath", repositoryPath))
+
+			err := os.Mkdir(outputPath, 0777)
+			if err != nil {
+				logger.Error("@os.Mkdir", zap.String("outputPath", outputPath), zap.String("error", err.Error()))
+				continue
+			}
+
 			cmd := exec.Command("git", "clone", repositoryModel.CloneURL, repositoryPath)
-			err := cmd.Run()
+			err = cmd.Run()
 			if err != nil {
 				logger.Error("@git clone", zap.String("cloneURL", repositoryModel.CloneURL), zap.String("repositoryPath", repositoryPath), zap.String("error", err.Error()))
 				continue
