@@ -16,15 +16,18 @@ GitHubから指定オーナーのリポジトリを取得（ `git clone` ）し�
 
 - チェックアウトブランチ指定
 
+## ■prepare
+- download binary
+
+https://github.com/sky0621/repertorium/releases
+
+- download config
+
+https://github.com/sky0621/repertorium/blob/master/.repertorium.yaml
+
+- edit config
+
+- set config to [$HOME/.repertorium.yaml]
+
 ## ■exec(binary) f.e. Linux
 $ ./repertorium_linux_amd64 get
-
-## ■environment
-$ go version
-
-go version go1.9.4 linux/amd64
-
-## ■exec(go run)
-$ dep ensure
-
-$ go run main.go --config .repertorium.yaml get
