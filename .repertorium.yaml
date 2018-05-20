@@ -4,9 +4,9 @@ get:
     maxPage: 10
 
   filter:
-    name: "^go-.*"
+    name: "^study-.*"
     language: "Go"
 
   checkout:
     branch: "master"
-
+    outputPath: "/tmp/gowork/src/github.com/sky0621/"

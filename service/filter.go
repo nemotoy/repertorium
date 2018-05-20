@@ -15,7 +15,10 @@ func Filter(name, language, listupOutputPath, filterOutputPath string) error {
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
 
-	r := regexp.MustCompilePOSIX(name)
+	var nameRegexp *regexp.Regexp
+	if name != "" {
+		nameRegexp = regexp.MustCompilePOSIX(name)
+	}
 
 	fp, err := os.Open(listupOutputPath)
 	if err != nil {
@@ -39,8 +42,33 @@ func Filter(name, language, listupOutputPath, filterOutputPath string) error {
 			return err
 		}
 
-		if r.FindIndex([]byte(repositoryModel.Name)) != nil {
-			logger.Info("result of unmarshal", zap.String("repository.name", repositoryModel.Name))
+		if nameRegexp == nil && language == "" {
+			repositoryModels = append(repositoryModels, &repositoryModel)
+			continue
+		}
+
+		matchName := func() bool {
+			if nameRegexp == nil {
+				return true
+			}
+			if nameRegexp.FindIndex([]byte(repositoryModel.Name)) != nil {
+				return true
+			}
+			return false
+		}
+
+		matchLanguage := func() bool {
+			if language == "" {
+				return true
+			}
+			if repositoryModel.Language == language {
+				return true
+			}
+			return false
+		}
+
+		if matchName() && matchLanguage() {
+			logger.Info("result of unmarshal", zap.String("repository.name", repositoryModel.Name), zap.String("repository.language", repositoryModel.Language))
 			repositoryModels = append(repositoryModels, &repositoryModel)
 		}
 	}
