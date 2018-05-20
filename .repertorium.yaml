@@ -4,7 +4,7 @@ get:
     maxPage: 10
 
   filter:
-    name: "go-.*"
+    name: "^go-.*"
     language: "Go"
 
   checkout:
