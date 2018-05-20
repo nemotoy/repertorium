@@ -15,10 +15,13 @@
 package cmd
 
 import (
+	"os"
 	"path/filepath"
 
+	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sky0621/repertorium/static"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 )
 
 // getCmd represents the get command
@@ -39,6 +42,9 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
+	logger, _ := zap.NewProduction()
+	defer logger.Sync()
+
 	rootCmd.AddCommand(getCmd)
 
 	// Here you will define your flags and configuration settings.
@@ -46,8 +52,16 @@ func init() {
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// getCmd.PersistentFlags().String("foo", "", "A help for foo")
-	getCmd.PersistentFlags().String(static.FlagKeyListupOutputPath, filepath.Join("intermediate_product", "listup.json"), "")
-	getCmd.PersistentFlags().String(static.FlagKeyFilterOutputPath, filepath.Join("intermediate_product", "filter.json"), "")
+
+	home, err := homedir.Dir()
+	if err != nil {
+		logger.Error(err.Error())
+		os.Exit(1)
+	}
+	logger.Info("current directory", zap.String("home", home))
+
+	getCmd.PersistentFlags().String(static.FlagKeyListupOutputPath, filepath.Join(home, "listup.json"), "")
+	getCmd.PersistentFlags().String(static.FlagKeyFilterOutputPath, filepath.Join(home, "filter.json"), "")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
