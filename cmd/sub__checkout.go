@@ -38,6 +38,7 @@ to quickly create a Cobra application.`,
 		logger.Info("checkout called")
 
 		branch := viper.GetString("get.checkout.branch")
+		outputPath := viper.GetString("get.checkout.outputPath")
 
 		filterOutputPath, err := cmd.PersistentFlags().GetString(static.FlagKeyFilterOutputPath)
 		if err != nil {
@@ -47,7 +48,7 @@ to quickly create a Cobra application.`,
 
 		logger.Info("[settings]", zap.String("branch", branch), zap.String("filterOutputPath", filterOutputPath))
 
-		service.Checkout(branch, filterOutputPath)
+		service.Checkout(branch, outputPath, filterOutputPath)
 	},
 }
 
