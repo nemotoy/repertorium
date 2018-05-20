@@ -89,5 +89,8 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		logger.Info("Using config file", zap.String("configfile", viper.ConfigFileUsed()))
+	} else {
+		logger.Info("Need config file [$HOME/.repertorium.yaml] or use flag `--config xxxx`")
+		os.Exit(-1)
 	}
 }

@@ -60,6 +60,22 @@ func Checkout(branch, outputPath, filterOutputPath string) error {
 				continue
 			}
 
+			if branch == "" {
+				continue
+			}
+
+			err = os.Chdir(repositoryPath)
+			if err != nil {
+				logger.Error("@os.Chdir", zap.String("repositoryPath", repositoryPath), zap.String("error", err.Error()))
+				continue
+			}
+
+			coCmd := exec.Command("git", "checkout", "-b", branch, "origin/"+branch)
+			err = coCmd.Run()
+			if err != nil {
+				logger.Error("@git checkout", zap.String("branch", branch), zap.String("error", err.Error()))
+				continue
+			}
 		}
 	}
 	if err := scanner.Err(); err != nil {
