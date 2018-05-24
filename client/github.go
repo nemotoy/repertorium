@@ -18,8 +18,8 @@ type gitHubClient struct {
 }
 
 // NewGitHubClient ...
-func NewGitHubClient() GitHubClient {
-	return &gitHubClient{cli: github.NewClient(nil)}
+func NewGitHubClient(hc *http.Client) GitHubClient {
+	return &gitHubClient{cli: github.NewClient(hc)}
 }
 
 // GetRepositoriesList ...

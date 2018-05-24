@@ -1,6 +1,7 @@
 get:
   listup:
     owner: "sky0621"
+    accessToken: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
     maxPage: 10
 
   filter:

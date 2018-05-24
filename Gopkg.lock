@@ -8,6 +8,12 @@
   version = "v1.4.7"
 
 [[projects]]
+  name = "github.com/golang/protobuf"
+  packages = ["proto"]
+  revision = "b4deda0973fb4c70b50d226b1af49f3da59f5265"
+  version = "v1.1.0"
+
+[[projects]]
   name = "github.com/google/go-github"
   packages = ["github"]
   revision = "e48060a28fac52d0f1cb758bc8b87c07bac4a87d"
@@ -52,7 +58,7 @@
   branch = "master"
   name = "github.com/mitchellh/go-homedir"
   packages = ["."]
-  revision = "b8bc1bf767474819792c23f32d8286a45736f1c6"
+  revision = "3864e76763d94a6df2f9960b16a20a33da9f9a66"
 
 [[projects]]
   branch = "master"
@@ -133,14 +139,26 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
-  packages = ["context"]
-  revision = "57065200b4b034a1c8ad54ff77069408c2218ae6"
+  packages = [
+    "context",
+    "context/ctxhttp"
+  ]
+  revision = "9ef9f5bb98a1fdc41f8cf6c250a4404b4085e389"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/oauth2"
+  packages = [
+    ".",
+    "internal"
+  ]
+  revision = "770e5ebd4ab27c4d70b0983674d138217f5e2c72"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "7c87d13f8e835d2fb3a70a2912c811ed0c1d241b"
+  revision = "04b83988a018ef3ebffe1485df79d6499b76a4b4"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -156,6 +174,20 @@
   version = "v0.3.0"
 
 [[projects]]
+  name = "google.golang.org/appengine"
+  packages = [
+    "internal",
+    "internal/base",
+    "internal/datastore",
+    "internal/log",
+    "internal/remote_api",
+    "internal/urlfetch",
+    "urlfetch"
+  ]
+  revision = "150dc57a1b433e64154302bdc40b6bb8aefa313a"
+  version = "v1.0.0"
+
+[[projects]]
   name = "gopkg.in/yaml.v2"
   packages = ["."]
   revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
@@ -164,6 +196,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d16935b45d3a66c85a07be6a750e1a3d37a95fe4bbabf0dac25d49ea0e38c905"
+  inputs-digest = "f92065756e2ad3ad0d53b061eb46b04a10dc63464f5f6b615a39562a8bce509d"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -28,3 +28,7 @@ cat /tmp/sky0621repos.txt | grep clone_url
     "clone_url": "https://github.com/sky0621/study-springboot-maven.git",
     "clone_url": "https://github.com/sky0621/study-terraform.git",
 </pre>
+
+<pre>
+curl -u sky0621 -i https://api.github.com/user/repos?per_page=200
+</pre>

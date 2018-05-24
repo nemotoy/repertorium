@@ -39,6 +39,7 @@ to quickly create a Cobra application.`,
 		logger.Info("listup called")
 
 		owner := viper.GetString("get.listup.owner")
+		accessToken := viper.GetString("get.listup.accessToken")
 		maxPage := viper.GetInt("get.listup.maxPage")
 
 		listupOutputPath, err := cmd.PersistentFlags().GetString(static.FlagKeyListupOutputPath)
@@ -49,7 +50,7 @@ to quickly create a Cobra application.`,
 
 		logger.Info("[settings]", zap.String("owner", owner), zap.Int("maxPage", maxPage), zap.String("listupOutputPath", listupOutputPath))
 
-		service.Listup(owner, maxPage, listupOutputPath)
+		service.Listup(owner, accessToken, maxPage, listupOutputPath)
 	},
 }
 

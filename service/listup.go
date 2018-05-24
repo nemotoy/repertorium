@@ -3,11 +3,13 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 	"os"
 
 	"github.com/google/go-github/github"
 	"github.com/sky0621/repertorium/client"
 	"go.uber.org/zap"
+	"golang.org/x/oauth2"
 )
 
 const (
@@ -15,19 +17,28 @@ const (
 )
 
 // Listup ...
-func Listup(owner string, maxPage int, listupOutputPath string) error {
+func Listup(owner, accessToken string, maxPage int, listupOutputPath string) error {
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
 
 	var totalResults []*github.Repository
-	bgCtx := context.Background()
+	ctx := context.Background()
+
+	var tc *http.Client
+	if accessToken != "" {
+		ts := oauth2.StaticTokenSource(
+			&oauth2.Token{AccessToken: accessToken},
+		)
+		tc = oauth2.NewClient(ctx, ts)
+	}
+
+	cli := client.NewGitHubClient(tc)
 
 	// 全リポジトリ取得するまでページング（１ページ１００がMAXの様子）
 	for page := 1; page < maxPage; {
 		logger.Info("now page", zap.Int("page", page))
-		cli := client.NewGitHubClient()
 		options := &github.RepositoryListOptions{ListOptions: github.ListOptions{Page: page, PerPage: perPage}}
-		results, err := cli.GetRepositoriesList(bgCtx, owner, options)
+		results, err := cli.GetRepositoriesList(ctx, owner, options)
 		if err != nil {
 			logger.Error("@GetRepositoriesList", zap.Int("page", page), zap.String("error", err.Error()))
 			return err
