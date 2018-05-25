@@ -3,6 +3,7 @@ package service
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -12,7 +13,7 @@ import (
 )
 
 // Checkout ...
-func Checkout(branch, outputPath, filterOutputPath string) error {
+func Checkout(targetOwner, branch, outputPath, filterOutputPath string) error {
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
 
@@ -58,11 +59,12 @@ func Checkout(branch, outputPath, filterOutputPath string) error {
 				continue
 			}
 		} else {
-			logger.Info("not exists repository", zap.String("cloneURL", repositoryModel.CloneURL), zap.String("repositoryPath", repositoryPath))
-			cmd := exec.Command("git", "clone", repositoryModel.CloneURL, repositoryPath)
+			cloneTarget := fmt.Sprintf("git@github.com:%s/%s.git", targetOwner, repositoryModel.Name)
+			logger.Info("not exists repository", zap.String("cloneTarget", cloneTarget), zap.String("repositoryPath", repositoryPath))
+			cmd := exec.Command("git", "clone", cloneTarget, repositoryPath)
 			err = cmd.Run()
 			if err != nil {
-				logger.Error("@git clone", zap.String("cloneURL", repositoryModel.CloneURL), zap.String("repositoryPath", repositoryPath), zap.String("error", err.Error()))
+				logger.Error("@git clone", zap.String("cloneTarget", cloneTarget), zap.String("repositoryPath", repositoryPath), zap.String("error", err.Error()))
 				continue
 			}
 

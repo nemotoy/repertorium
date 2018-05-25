@@ -37,6 +37,7 @@ to quickly create a Cobra application.`,
 		defer logger.Sync()
 		logger.Info("checkout called")
 
+		targetOwner := viper.GetString("get.checkout.targetOwner")
 		branch := viper.GetString("get.checkout.branch")
 		outputPath := viper.GetString("get.checkout.outputPath")
 
@@ -46,9 +47,9 @@ to quickly create a Cobra application.`,
 			return
 		}
 
-		logger.Info("[settings]", zap.String("branch", branch), zap.String("filterOutputPath", filterOutputPath))
+		logger.Info("[settings]", zap.String("targetOwner", targetOwner), zap.String("branch", branch), zap.String("filterOutputPath", filterOutputPath))
 
-		service.Checkout(branch, outputPath, filterOutputPath)
+		service.Checkout(targetOwner, branch, outputPath, filterOutputPath)
 	},
 }
 

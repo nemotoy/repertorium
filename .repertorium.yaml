@@ -9,5 +9,6 @@ get:
     language: "Go"
 
   checkout:
+    targetOwner: "sky0621"
     branch: "master"
     outputPath: "/tmp/gowork/src/github.com/sky0621/"
