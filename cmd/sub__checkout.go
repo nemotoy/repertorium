@@ -15,6 +15,7 @@
 package cmd
 
 import (
+	"github.com/sky0621/repertorium/config"
 	"github.com/sky0621/repertorium/service"
 	"github.com/sky0621/repertorium/static"
 	"github.com/spf13/cobra"
@@ -37,19 +38,41 @@ to quickly create a Cobra application.`,
 		defer logger.Sync()
 		logger.Info("checkout called")
 
-		targetOwner := viper.GetString("get.checkout.targetOwner")
-		branch := viper.GetString("get.checkout.branch")
-		outputPath := viper.GetString("get.checkout.outputPath")
+		var cfg *config.CheckoutConfig
+		// FIXME fail viper.Unmarshal(cfg)
+		// err := viper.Unmarshal(cfg)
+		// if err != nil {
+		// 	logger.Error("@viper.Unmarshal", zap.String("err", err.Error()))
+		// 	return
+		// }
+		cfg = &config.CheckoutConfig{
+			Access: &config.AccessConfig{
+				User:     viper.GetString("checkout.access.user"),
+				Password: viper.GetString("checkout.access.password"),
+			},
+			Target: &config.TargetConfig{
+				Owner:  viper.GetString("checkout.target.owner"),
+				Branch: viper.GetString("checkout.target.branch"),
+			},
+			Output: &config.OutputConfig{
+				Path: viper.GetString("checkout.output.path"),
+			},
+		}
 
 		filterOutputPath, err := cmd.PersistentFlags().GetString(static.FlagKeyFilterOutputPath)
 		if err != nil {
-			logger.Error("@PersistentFlags.Get", zap.String("flag.key", static.FlagKeyFilterOutputPath))
+			logger.Error("@PersistentFlags.Get", zap.String("flag.key", static.FlagKeyFilterOutputPath), zap.String("err", err.Error()))
 			return
 		}
 
-		logger.Info("[settings]", zap.String("targetOwner", targetOwner), zap.String("branch", branch), zap.String("filterOutputPath", filterOutputPath))
+		logger.Info("[settings]",
+			zap.String("Access.User", cfg.Access.User), zap.String("Access.Password", cfg.Access.Password),
+			zap.String("Target.Owner", cfg.Target.Owner), zap.String("Target.Branch", cfg.Target.Branch),
+			zap.String("Output.Path", cfg.Output.Path),
+			zap.String("filterOutputPath", filterOutputPath),
+		)
 
-		service.Checkout(targetOwner, branch, outputPath, filterOutputPath)
+		service.Checkout(cfg, filterOutputPath)
 	},
 }
 

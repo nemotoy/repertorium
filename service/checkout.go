@@ -9,11 +9,12 @@ import (
 	"path/filepath"
 
 	"github.com/sky0621/repertorium/client/model"
+	"github.com/sky0621/repertorium/config"
 	"go.uber.org/zap"
 )
 
 // Checkout ...
-func Checkout(targetOwner, branch, outputPath, filterOutputPath string) error {
+func Checkout(cfg *config.CheckoutConfig, filterOutputPath string) error {
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
 
@@ -27,6 +28,11 @@ func Checkout(targetOwner, branch, outputPath, filterOutputPath string) error {
 			fp.Close()
 		}
 	}()
+
+	outputPath, err := filepath.Abs(cfg.Output.Path)
+	if err != nil {
+		logger.Error("@filepath.Abs", zap.String("cfg.Output.Path", cfg.Output.Path), zap.String("error", err.Error()))
+	}
 
 	err = os.MkdirAll(outputPath, 0777)
 	if err != nil {
@@ -45,6 +51,7 @@ func Checkout(targetOwner, branch, outputPath, filterOutputPath string) error {
 		}
 
 		repositoryPath := filepath.Join(outputPath, repositoryModel.Name)
+
 		if _, err := os.Stat(repositoryPath); err == nil {
 			logger.Info("exists repository", zap.String("repositoryPath", repositoryPath))
 			err := os.Chdir(repositoryPath)
@@ -59,8 +66,12 @@ func Checkout(targetOwner, branch, outputPath, filterOutputPath string) error {
 				continue
 			}
 		} else {
-//			cloneTarget := fmt.Sprintf("git@github.com:%s/%s.git", targetOwner, repositoryModel.Name)
-			cloneTarget := fmt.Sprintf("https://%s:%s@github.com/%s/%s.git", user, password, targetOwner, repositoryModel.Name)
+			cloneTarget := ""
+			if cfg.Access.User == "" || cfg.Access.Password == "" {
+				cloneTarget = fmt.Sprintf("https://github.com/%s/%s.git", cfg.Target.Owner, repositoryModel.Name)
+			} else {
+				cloneTarget = fmt.Sprintf("https://%s:%s@github.com/%s/%s.git", cfg.Access.User, cfg.Access.Password, cfg.Target.Owner, repositoryModel.Name)
+			}
 			logger.Info("not exists repository", zap.String("cloneTarget", cloneTarget), zap.String("repositoryPath", repositoryPath))
 			cmd := exec.Command("git", "clone", cloneTarget, repositoryPath)
 			err = cmd.Run()
@@ -69,7 +80,7 @@ func Checkout(targetOwner, branch, outputPath, filterOutputPath string) error {
 				continue
 			}
 
-			if branch == "" {
+			if cfg.Target.Branch == "" {
 				continue
 			}
 
@@ -79,10 +90,10 @@ func Checkout(targetOwner, branch, outputPath, filterOutputPath string) error {
 				continue
 			}
 
-			coCmd := exec.Command("git", "checkout", "-b", branch, "origin/"+branch)
+			coCmd := exec.Command("git", "checkout", "-b", cfg.Target.Branch, "origin/"+cfg.Target.Branch)
 			err = coCmd.Run()
 			if err != nil {
-				logger.Error("@git checkout", zap.String("branch", branch), zap.String("error", err.Error()))
+				logger.Error("@git checkout", zap.String("branch", cfg.Target.Branch), zap.String("error", err.Error()))
 				continue
 			}
 		}

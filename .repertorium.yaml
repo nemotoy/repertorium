@@ -9,8 +9,11 @@ get:
     language: "Go"
 
   checkout:
-    targetOwner: "sky0621"
-    user: ""
-    password: ""
-    branch: "master"
-    outputPath: "/tmp/gowork/src/github.com/sky0621/"
+    access:
+      user: ""
+      password: ""
+    target:
+      owner: "sky0621"
+      branch: "master"
+    output:
+      path: "/tmp/gowork/src/github.com/sky0621/"
