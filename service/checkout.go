@@ -59,7 +59,8 @@ func Checkout(targetOwner, branch, outputPath, filterOutputPath string) error {
 				continue
 			}
 		} else {
-			cloneTarget := fmt.Sprintf("git@github.com:%s/%s.git", targetOwner, repositoryModel.Name)
+//			cloneTarget := fmt.Sprintf("git@github.com:%s/%s.git", targetOwner, repositoryModel.Name)
+			cloneTarget := fmt.Sprintf("https://%s:%s@github.com/%s/%s.git", user, password, targetOwner, repositoryModel.Name)
 			logger.Info("not exists repository", zap.String("cloneTarget", cloneTarget), zap.String("repositoryPath", repositoryPath))
 			cmd := exec.Command("git", "clone", cloneTarget, repositoryPath)
 			err = cmd.Run()
