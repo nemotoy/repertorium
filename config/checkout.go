@@ -2,6 +2,16 @@ package config
 
 // TODO Validation
 
+// Config ...
+type Config struct {
+	Get *GetConfig `yaml:"get"`
+}
+
+// GetConfig ...
+type GetConfig struct {
+	Checkout *CheckoutConfig `yaml:"checkout"`
+}
+
 // CheckoutConfig ...
 type CheckoutConfig struct {
 	Access *AccessConfig `yaml:"access"`
@@ -17,8 +27,7 @@ type AccessConfig struct {
 
 // TargetConfig ...
 type TargetConfig struct {
-	Owner  string `yaml:"owner"`
-	Branch string `yaml:"branch"`
+	Owner string `yaml:"owner"`
 }
 
 // OutputConfig ...

@@ -11,6 +11,7 @@ import (
 	"github.com/sky0621/repertorium/client/model"
 	"github.com/sky0621/repertorium/config"
 	"go.uber.org/zap"
+	"gopkg.in/src-d/go-git.v4"
 )
 
 // Checkout ...
@@ -33,6 +34,7 @@ func Checkout(cfg *config.CheckoutConfig, filterOutputPath string) error {
 	if err != nil {
 		logger.Error("@filepath.Abs", zap.String("cfg.Output.Path", cfg.Output.Path), zap.String("error", err.Error()))
 	}
+	logger.Info("outputPath", zap.String("outputPath", outputPath))
 
 	err = os.MkdirAll(outputPath, 0777)
 	if err != nil {
@@ -59,6 +61,7 @@ func Checkout(cfg *config.CheckoutConfig, filterOutputPath string) error {
 				logger.Error("@os.Chdir", zap.String("repositoryPath", repositoryPath), zap.String("error", err.Error()))
 				continue
 			}
+
 			cmd := exec.Command("git", "pull")
 			err = cmd.Run()
 			if err != nil {
@@ -72,28 +75,16 @@ func Checkout(cfg *config.CheckoutConfig, filterOutputPath string) error {
 			} else {
 				cloneTarget = fmt.Sprintf("https://%s:%s@github.com/%s/%s.git", cfg.Access.User, cfg.Access.Password, cfg.Target.Owner, repositoryModel.Name)
 			}
+			cloneTarget = fmt.Sprintf("git@github.com:%s/%s.git", cfg.Target.Owner, repositoryModel.Name)
+
 			logger.Info("not exists repository", zap.String("cloneTarget", cloneTarget), zap.String("repositoryPath", repositoryPath))
-			cmd := exec.Command("git", "clone", cloneTarget, repositoryPath)
-			err = cmd.Run()
+
+			_, err := git.PlainClone(repositoryPath, false, &git.CloneOptions{
+				URL:               cloneTarget,
+				RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
+			})
 			if err != nil {
 				logger.Error("@git clone", zap.String("cloneTarget", cloneTarget), zap.String("repositoryPath", repositoryPath), zap.String("error", err.Error()))
-				continue
-			}
-
-			if cfg.Target.Branch == "" {
-				continue
-			}
-
-			err = os.Chdir(repositoryPath)
-			if err != nil {
-				logger.Error("@os.Chdir", zap.String("repositoryPath", repositoryPath), zap.String("error", err.Error()))
-				continue
-			}
-
-			coCmd := exec.Command("git", "checkout", "-b", cfg.Target.Branch, "origin/"+cfg.Target.Branch)
-			err = coCmd.Run()
-			if err != nil {
-				logger.Error("@git checkout", zap.String("branch", cfg.Target.Branch), zap.String("error", err.Error()))
 				continue
 			}
 		}

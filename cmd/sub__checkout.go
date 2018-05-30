@@ -38,25 +38,11 @@ to quickly create a Cobra application.`,
 		defer logger.Sync()
 		logger.Info("checkout called")
 
-		var cfg *config.CheckoutConfig
-		// FIXME fail viper.Unmarshal(cfg)
-		// err := viper.Unmarshal(cfg)
-		// if err != nil {
-		// 	logger.Error("@viper.Unmarshal", zap.String("err", err.Error()))
-		// 	return
-		// }
-		cfg = &config.CheckoutConfig{
-			Access: &config.AccessConfig{
-				User:     viper.GetString("checkout.access.user"),
-				Password: viper.GetString("checkout.access.password"),
-			},
-			Target: &config.TargetConfig{
-				Owner:  viper.GetString("checkout.target.owner"),
-				Branch: viper.GetString("checkout.target.branch"),
-			},
-			Output: &config.OutputConfig{
-				Path: viper.GetString("checkout.output.path"),
-			},
+		var cfg config.Config
+		err := viper.Unmarshal(&cfg)
+		if err != nil {
+			logger.Error("@viper.Unmarshal", zap.String("err", err.Error()))
+			return
 		}
 
 		filterOutputPath, err := cmd.PersistentFlags().GetString(static.FlagKeyFilterOutputPath)
@@ -65,14 +51,15 @@ to quickly create a Cobra application.`,
 			return
 		}
 
+		c := cfg.Get.Checkout
 		logger.Info("[settings]",
-			zap.String("Access.User", cfg.Access.User), zap.String("Access.Password", cfg.Access.Password),
-			zap.String("Target.Owner", cfg.Target.Owner), zap.String("Target.Branch", cfg.Target.Branch),
-			zap.String("Output.Path", cfg.Output.Path),
+			zap.String("Access.User", c.Access.User), zap.String("Access.Password", c.Access.Password),
+			zap.String("Target.Owner", c.Target.Owner),
+			zap.String("Output.Path", c.Output.Path),
 			zap.String("filterOutputPath", filterOutputPath),
 		)
 
-		service.Checkout(cfg, filterOutputPath)
+		service.Checkout(c, filterOutputPath)
 	},
 }
 
