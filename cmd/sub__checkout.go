@@ -53,8 +53,7 @@ to quickly create a Cobra application.`,
 
 		c := cfg.Get.Checkout
 		logger.Info("[settings]",
-			zap.String("Access.User", c.Access.User), zap.String("Access.Password", c.Access.Password),
-			zap.String("Target.Owner", c.Target.Owner),
+			zap.String("Target.Owner", c.Target.Owner), zap.String("Target.Branch", c.Target.Branch),
 			zap.String("Output.Path", c.Output.Path),
 			zap.String("filterOutputPath", filterOutputPath),
 		)

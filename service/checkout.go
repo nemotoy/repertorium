@@ -11,7 +11,6 @@ import (
 	"github.com/sky0621/repertorium/client/model"
 	"github.com/sky0621/repertorium/config"
 	"go.uber.org/zap"
-	"gopkg.in/src-d/go-git.v4"
 )
 
 // Checkout ...
@@ -69,20 +68,11 @@ func Checkout(cfg *config.CheckoutConfig, filterOutputPath string) error {
 				continue
 			}
 		} else {
-			cloneTarget := ""
-			if cfg.Access.User == "" || cfg.Access.Password == "" {
-				cloneTarget = fmt.Sprintf("https://github.com/%s/%s.git", cfg.Target.Owner, repositoryModel.Name)
-			} else {
-				cloneTarget = fmt.Sprintf("https://%s:%s@github.com/%s/%s.git", cfg.Access.User, cfg.Access.Password, cfg.Target.Owner, repositoryModel.Name)
-			}
-			cloneTarget = fmt.Sprintf("git@github.com:%s/%s.git", cfg.Target.Owner, repositoryModel.Name)
-
+			cloneTarget := fmt.Sprintf("git@github.com:%s/%s.git", cfg.Target.Owner, repositoryModel.Name)
 			logger.Info("not exists repository", zap.String("cloneTarget", cloneTarget), zap.String("repositoryPath", repositoryPath))
 
-			_, err := git.PlainClone(repositoryPath, false, &git.CloneOptions{
-				URL:               cloneTarget,
-				RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
-			})
+			cmd := exec.Command("git", "clone", "-b", cfg.Target.Branch, cloneTarget, repositoryPath)
+			err := cmd.Run()
 			if err != nil {
 				logger.Error("@git clone", zap.String("cloneTarget", cloneTarget), zap.String("repositoryPath", repositoryPath), zap.String("error", err.Error()))
 				continue
