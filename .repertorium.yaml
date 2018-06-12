@@ -14,8 +14,8 @@ get:
       branch: "master"
     output:
       path: "/tmp/gowork/src/github.com/sky0621/"
-analyze:
-  ast:
+gen:
+  testcode:
     input:
       path: "/tmp/gowork/src/github.com/sky0621/"
     filter:

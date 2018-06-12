@@ -5,6 +5,7 @@ package config
 // Config ...
 type Config struct {
 	Get *GetConfig `yaml:"get"`
+	Gen *GenConfig `yaml:"gen"`
 }
 
 // GetConfig ...
@@ -27,4 +28,13 @@ type TargetConfig struct {
 // OutputConfig ...
 type OutputConfig struct {
 	Path string `yaml:"path"`
+}
+
+// GenConfig ...
+type GenConfig struct {
+	Testcode *TestcodeConfig `yaml:"testcode"`
+}
+
+// TestcodeConfig ...
+type TestcodeConfig struct {
 }
