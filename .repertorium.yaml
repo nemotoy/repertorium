@@ -14,3 +14,13 @@ get:
       branch: "master"
     output:
       path: "/tmp/gowork/src/github.com/sky0621/"
+analyze:
+  ast:
+    input:
+      path: "/tmp/gowork/src/github.com/sky0621/"
+    filter:
+      include: []
+      exclude: []
+    output:
+      path: "/tmp/gowork/ast/github.com/sky0621/"
+
