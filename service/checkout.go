@@ -17,6 +17,7 @@ import (
 func Checkout(cfg *config.CheckoutConfig, filterOutputPath string) error {
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
+	logger.Info("service.Checkout START")
 
 	fp, err := os.Open(filterOutputPath)
 	if err != nil {

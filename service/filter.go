@@ -14,6 +14,7 @@ import (
 func Filter(name, language, listupOutputPath, filterOutputPath string) error {
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
+	logger.Info("service.Filter START")
 
 	var nameRegexp *regexp.Regexp
 	if name != "" {

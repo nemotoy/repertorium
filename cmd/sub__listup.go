@@ -50,7 +50,11 @@ to quickly create a Cobra application.`,
 
 		logger.Info("[settings]", zap.String("owner", owner), zap.Int("maxPage", maxPage), zap.String("listupOutputPath", listupOutputPath))
 
-		service.Listup(owner, accessToken, maxPage, listupOutputPath)
+		err = service.Listup(owner, accessToken, maxPage, listupOutputPath)
+		if err != nil {
+			logger.Error("@service.Listup", zap.String("err", err.Error()))
+			return
+		}
 	},
 }
 

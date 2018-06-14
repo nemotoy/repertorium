@@ -15,9 +15,11 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/sky0621/repertorium/config"
+	"github.com/sky0621/repertorium/service"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 // testcodeCmd represents the testcode command
@@ -31,7 +33,24 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("testcode called")
+		logger, _ := zap.NewProduction()
+		defer logger.Sync()
+		logger.Info("testcode called")
+
+		var cfg config.Config
+		err := viper.Unmarshal(&cfg)
+		if err != nil {
+			logger.Error("@viper.Unmarshal", zap.String("err", err.Error()))
+			return
+		}
+
+		c := cfg.Gen.Testcode
+
+		err = service.Testcode(c)
+		if err != nil {
+			logger.Error("@service.Testcode", zap.String("err", err.Error()))
+			return
+		}
 	},
 }
 

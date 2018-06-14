@@ -58,7 +58,11 @@ to quickly create a Cobra application.`,
 			zap.String("filterOutputPath", filterOutputPath),
 		)
 
-		service.Checkout(c, filterOutputPath)
+		err = service.Checkout(c, filterOutputPath)
+		if err != nil {
+			logger.Error("@service.Checkout", zap.String("err", err.Error()))
+			return
+		}
 	},
 }
 

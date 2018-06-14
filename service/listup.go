@@ -20,6 +20,7 @@ const (
 func Listup(owner, accessToken string, maxPage int, listupOutputPath string) error {
 	logger, _ := zap.NewProduction()
 	defer logger.Sync()
+	logger.Info("service.Listup START")
 
 	var totalResults []*github.Repository
 	ctx := context.Background()
