@@ -52,7 +52,7 @@ to quickly create a Cobra application.`,
 
 		err = service.Listup(owner, accessToken, maxPage, listupOutputPath)
 		if err != nil {
-			logger.Error("@service.Listup", zap.String("err", err.Error()))
+			logger.Error("@service.Listup", zap.Error(err))
 			return
 		}
 	},

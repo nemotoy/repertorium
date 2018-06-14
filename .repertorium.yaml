@@ -18,9 +18,8 @@ gen:
   testcode:
     input:
       path: "/tmp/gowork/src/github.com/sky0621/"
-    filter:
-      include: []
-      exclude: []
+      filter:
+        name: "^study-.*"
     output:
-      path: "/tmp/gowork/ast/github.com/sky0621/"
+      path: "/tmp/gowork/testcode/github.com/sky0621/"
 

@@ -37,4 +37,10 @@ type GenConfig struct {
 
 // TestcodeConfig ...
 type TestcodeConfig struct {
+	Input *InputConfig `yaml:"input"`
+}
+
+// InputConfig ...
+type InputConfig struct {
+	Path string `yaml:"path"`
 }

@@ -56,7 +56,7 @@ to quickly create a Cobra application.`,
 
 		err = service.Filter(name, language, listupOutputPath, filterOutputPath)
 		if err != nil {
-			logger.Error("@service.Filter", zap.String("err", err.Error()))
+			logger.Error("@service.Filter", zap.Error(err))
 			return
 		}
 	},

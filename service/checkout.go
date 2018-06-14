@@ -21,7 +21,7 @@ func Checkout(cfg *config.CheckoutConfig, filterOutputPath string) error {
 
 	fp, err := os.Open(filterOutputPath)
 	if err != nil {
-		logger.Error("@os.Open", zap.String("filterOutputPath", filterOutputPath), zap.String("error", err.Error()))
+		logger.Error("@os.Open", zap.String("filterOutputPath", filterOutputPath), zap.Error(err))
 		return err
 	}
 	defer func() {
@@ -32,13 +32,13 @@ func Checkout(cfg *config.CheckoutConfig, filterOutputPath string) error {
 
 	outputPath, err := filepath.Abs(cfg.Output.Path)
 	if err != nil {
-		logger.Error("@filepath.Abs", zap.String("cfg.Output.Path", cfg.Output.Path), zap.String("error", err.Error()))
+		logger.Error("@filepath.Abs", zap.String("cfg.Output.Path", cfg.Output.Path), zap.Error(err))
 	}
 	logger.Info("outputPath", zap.String("outputPath", outputPath))
 
 	err = os.MkdirAll(outputPath, 0777)
 	if err != nil {
-		logger.Error("@os.Mkdir", zap.String("outputPath", outputPath), zap.String("error", err.Error()))
+		logger.Error("@os.Mkdir", zap.String("outputPath", outputPath), zap.Error(err))
 	}
 
 	scanner := bufio.NewScanner(fp)
@@ -48,7 +48,7 @@ func Checkout(cfg *config.CheckoutConfig, filterOutputPath string) error {
 		var repositoryModel model.Repository
 		err := json.Unmarshal([]byte(text), &repositoryModel)
 		if err != nil {
-			logger.Error("@json.Unmarshal", zap.String("text", text), zap.String("error", err.Error()))
+			logger.Error("@json.Unmarshal", zap.String("text", text), zap.Error(err))
 			return err
 		}
 
@@ -58,14 +58,14 @@ func Checkout(cfg *config.CheckoutConfig, filterOutputPath string) error {
 			logger.Info("exists repository", zap.String("repositoryPath", repositoryPath))
 			err := os.Chdir(repositoryPath)
 			if err != nil {
-				logger.Error("@os.Chdir", zap.String("repositoryPath", repositoryPath), zap.String("error", err.Error()))
+				logger.Error("@os.Chdir", zap.String("repositoryPath", repositoryPath), zap.Error(err))
 				continue
 			}
 
 			cmd := exec.Command("git", "pull")
 			err = cmd.Run()
 			if err != nil {
-				logger.Error("@git pull", zap.String("repositoryPath", repositoryPath), zap.String("error", err.Error()))
+				logger.Error("@git pull", zap.String("repositoryPath", repositoryPath), zap.Error(err))
 				continue
 			}
 		} else {
@@ -75,13 +75,13 @@ func Checkout(cfg *config.CheckoutConfig, filterOutputPath string) error {
 			cmd := exec.Command("git", "clone", "-b", cfg.Target.Branch, cloneTarget, repositoryPath)
 			err := cmd.Run()
 			if err != nil {
-				logger.Error("@git clone", zap.String("cloneTarget", cloneTarget), zap.String("repositoryPath", repositoryPath), zap.String("error", err.Error()))
+				logger.Error("@git clone", zap.String("cloneTarget", cloneTarget), zap.String("repositoryPath", repositoryPath), zap.Error(err))
 				continue
 			}
 		}
 	}
 	if err := scanner.Err(); err != nil {
-		logger.Error("@scanner.Scan", zap.String("error", err.Error()))
+		logger.Error("@scanner.Scan", zap.Error(err))
 		return err
 	}
 

@@ -23,7 +23,7 @@ func Filter(name, language, listupOutputPath, filterOutputPath string) error {
 
 	fp, err := os.Open(listupOutputPath)
 	if err != nil {
-		logger.Error("@os.Open", zap.String("listupOutputPath", listupOutputPath), zap.String("error", err.Error()))
+		logger.Error("@os.Open", zap.String("listupOutputPath", listupOutputPath), zap.Error(err))
 		return err
 	}
 	defer func() {
@@ -39,7 +39,7 @@ func Filter(name, language, listupOutputPath, filterOutputPath string) error {
 		var repositoryModel model.Repository
 		err := json.Unmarshal([]byte(text), &repositoryModel)
 		if err != nil {
-			logger.Error("@json.Unmarshal", zap.String("text", text), zap.String("error", err.Error()))
+			logger.Error("@json.Unmarshal", zap.String("text", text), zap.Error(err))
 			return err
 		}
 
@@ -74,13 +74,13 @@ func Filter(name, language, listupOutputPath, filterOutputPath string) error {
 		}
 	}
 	if err := scanner.Err(); err != nil {
-		logger.Error("@scanner.Scan", zap.String("error", err.Error()))
+		logger.Error("@scanner.Scan", zap.Error(err))
 		return err
 	}
 
 	fl, err := os.Create(filterOutputPath)
 	if err != nil {
-		logger.Error("@os.Create", zap.String("filterOutputPath", filterOutputPath), zap.String("error", err.Error()))
+		logger.Error("@os.Create", zap.String("filterOutputPath", filterOutputPath), zap.Error(err))
 		return err
 	}
 	defer fl.Close()
@@ -88,7 +88,7 @@ func Filter(name, language, listupOutputPath, filterOutputPath string) error {
 	for _, repositoryModel := range repositoryModels {
 		resultJSON, err := json.Marshal(&repositoryModel)
 		if err != nil {
-			logger.Error("@json.Marshal", zap.String("error", err.Error()))
+			logger.Error("@json.Marshal", zap.Error(err))
 			return err
 		}
 		fl.Write(resultJSON)

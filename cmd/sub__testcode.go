@@ -45,6 +45,9 @@ to quickly create a Cobra application.`,
 		}
 
 		c := cfg.Gen.Testcode
+		logger.Info("[settings]",
+			zap.String("Input.Path", c.Input.Path),
+		)
 
 		err = service.Testcode(c)
 		if err != nil {

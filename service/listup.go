@@ -41,7 +41,7 @@ func Listup(owner, accessToken string, maxPage int, listupOutputPath string) err
 		options := &github.RepositoryListOptions{ListOptions: github.ListOptions{Page: page, PerPage: perPage}}
 		results, err := cli.GetRepositoriesList(ctx, owner, options)
 		if err != nil {
-			logger.Error("@GetRepositoriesList", zap.Int("page", page), zap.String("error", err.Error()))
+			logger.Error("@GetRepositoriesList", zap.Int("page", page), zap.Error(err))
 			return err
 		}
 
@@ -60,7 +60,7 @@ func Listup(owner, accessToken string, maxPage int, listupOutputPath string) err
 
 	fl, err := os.Create(listupOutputPath)
 	if err != nil {
-		logger.Error("@os.Create", zap.String("listupOutputPath", listupOutputPath), zap.String("error", err.Error()))
+		logger.Error("@os.Create", zap.String("listupOutputPath", listupOutputPath), zap.Error(err))
 		return err
 	}
 	defer fl.Close()
@@ -68,7 +68,7 @@ func Listup(owner, accessToken string, maxPage int, listupOutputPath string) err
 	for _, totalResult := range totalResults {
 		resultJSON, err := json.Marshal(&totalResult)
 		if err != nil {
-			logger.Error("@json.Marshal", zap.String("error", err.Error()))
+			logger.Error("@json.Marshal", zap.Error(err))
 			return err
 		}
 		fl.Write(resultJSON)

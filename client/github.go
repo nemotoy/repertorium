@@ -29,7 +29,7 @@ func (c *gitHubClient) GetRepositoriesList(ctx context.Context, owner string, op
 
 	results, res, err := c.cli.Repositories.List(ctx, owner, options)
 	if err != nil {
-		logger.Error("@Repositories.List", zap.String("owner", owner), zap.String("error", err.Error()))
+		logger.Error("@Repositories.List", zap.String("owner", owner), zap.Error(err))
 		return nil, err
 	}
 	if res != nil {

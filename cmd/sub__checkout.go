@@ -41,13 +41,13 @@ to quickly create a Cobra application.`,
 		var cfg config.Config
 		err := viper.Unmarshal(&cfg)
 		if err != nil {
-			logger.Error("@viper.Unmarshal", zap.String("err", err.Error()))
+			logger.Error("@viper.Unmarshal", zap.Error(err))
 			return
 		}
 
 		filterOutputPath, err := cmd.PersistentFlags().GetString(static.FlagKeyFilterOutputPath)
 		if err != nil {
-			logger.Error("@PersistentFlags.Get", zap.String("flag.key", static.FlagKeyFilterOutputPath), zap.String("err", err.Error()))
+			logger.Error("@PersistentFlags.Get", zap.String("flag.key", static.FlagKeyFilterOutputPath), zap.Error(err))
 			return
 		}
 
@@ -60,7 +60,7 @@ to quickly create a Cobra application.`,
 
 		err = service.Checkout(c, filterOutputPath)
 		if err != nil {
-			logger.Error("@service.Checkout", zap.String("err", err.Error()))
+			logger.Error("@service.Checkout", zap.Error(err))
 			return
 		}
 	},
